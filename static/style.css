@@ -1,0 +1,243 @@
+:root {
+  --army-green: #4b5d42;
+  --army-light: #7a8f6a;
+  --bg-cream: #f6f5f1;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-cream);
+  padding-top: 80px; /* for fixed navbar */
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* NAVBAR */
+  .navbar {
+        background: white;
+      }
+
+      .navbar-brand img {
+        height: 40px;
+      }
+
+      .btn-main {
+        background: var(--army-green);
+        color: white;
+        border-radius: 10px;
+        padding: 12px 25px;
+        border: none;
+      }
+
+      .btn-main:hover {
+        background: var(--army-light);
+      }
+
+      /* HERO */
+      .hero {
+        padding: 80px 0;
+      }
+
+      .hero h1 {
+        font-weight: 700;
+        font-size: 3rem;
+        color: var(--army-green);
+      }
+
+      .badge-india {
+        background: var(--army-green);
+        padding: 8px 18px;
+        border-radius: 20px;
+        color: white;
+        font-size: 14px;
+      }
+
+      /* CARDS */
+      .info-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        height: 100%;
+      }
+
+      .meal-card img {
+        border-radius: 16px;
+        height: 180px;
+        object-fit: cover;
+      }
+
+      .section {
+        padding: 70px 0;
+      }
+
+      /* Toggle button */
+      #themeToggle {
+        transition: transform 0.3s ease;
+      }
+      #themeToggle:hover {
+        transform: rotate(15deg);
+      }
+      
+      /* DARK MODE */
+      body.dark {
+        background: #121212;
+        color: #eaeaea;
+      }
+
+      body.dark .info-card,
+      body.dark .section,
+      body.dark .bg-white {
+        background: #111827 !important;
+        color: #eaeaea;
+      }
+
+      body.dark p,
+      body.dark .text-muted {
+        color: #b5b5b5 !important;
+      }
+
+      body.dark .btn-outline-secondary {
+        border-color: #aaa;
+        color: #eee;
+      }
+
+      .card,
+      .info-card,
+      .meal-card {
+        transition: all 0.3s ease;
+      }
+
+      .card:hover,
+      .info-card:hover,
+      .meal-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 0 0 1px rgba(255,255,255,0.06),
+              0 20px 50px rgba(0,0,0,0.6);
+      }
+
+      .btn {
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 30px rgba(75,93,66,0.4);
+      }
+
+      .card img {
+        transition: transform 0.4s ease;
+      }
+
+      .card:hover img {
+        transform: scale(1.08);
+      }
+
+      /* =======================
+      DARK MODE THEME SYSTEM
+    ======================= */
+
+    body.dark {
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    /* NAVBAR */
+    body.dark .navbar {
+      background: #020617 !important;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    /* HERO SECTION */
+    body.dark .hero {
+      background: radial-gradient(circle at top, #020617, #020617);
+    }
+
+    /* SECTIONS */
+    body.dark section {
+      background: #020617;
+    }
+
+    /* CARDS */
+    body.dark .card {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    /* HOVER ELEVATION */
+    body.dark .card:hover {
+      transform: translateY(-6px);
+      box-shadow:
+        0 20px 40px rgba(0,0,0,0.8);
+    }
+
+    /* HEADINGS */
+    body.dark h1,
+    body.dark h2,
+    body.dark h3 {
+      color: #f8fafc;
+    }
+
+    /* TEXT */
+    body.dark p,
+    body.dark span {
+      color: #cbd5f5;
+    }
+
+    /* BUTTONS */
+    body.dark .btn-primary {
+      background: #4b6f44;
+      border: none;
+    }
+
+    body.dark .btn-primary:hover {
+      background: #5f8a55;
+    }
+
+    /* ACCORDION */
+    body.dark .accordion-item {
+      background: #020617;
+      border: 1px solid #1e293b;
+    }
+
+    body.dark .accordion-button {
+      background: #020617;
+      color: #f8fafc;
+    }
+
+    body.dark .accordion-button:not(.collapsed) {
+      background: #020617;
+      color: #4b6f44;
+    }
+
+    /* HOW IT WORKS CAROUSEL */
+    .carousel-img {
+      width: 100%;
+      max-width: 420px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      margin-bottom: 50px;
+    }
+
+    /* Spacing for text */
+    .carousel-item h3 {
+      color: #4b6f44; /* army green */
+      font-weight: 600;
+    }
+
+    .carousel-item p {
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* Dark mode support */
+    body.dark .carousel-item p {
+      color: #cbd5f5;
+    }
+
+    body.dark .carousel-item h3 {
+      color: #6fa36a;
+    }

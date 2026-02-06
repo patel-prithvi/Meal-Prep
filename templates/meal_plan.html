@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Your Meal Plan | Meal Planner</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ================= THEME VARIABLES ================= */
+:root {
+  --bg: #f6f5f1;
+  --card: #ffffff;
+  --text: #1f1f1f;
+  --muted: #6c757d;
+  --primary: #4B5320;
+  --border: rgba(0,0,0,0.08);
+}
+
+body.dark {
+  --bg: #020617;
+  --card: #111827;
+  --text: #f1f1f1;
+  --muted: #b5b5b5;
+  --primary: #9aa45a;
+  --border: rgba(255,255,255,0.12);
+}
+
+/* ================= BASE ================= */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+p, span, label, li, small {
+  color: var(--text);
+}
+
+.text-muted {
+  color: var(--muted) !important;
+}
+
+/* ================= HERO ================= */
+.page-hero {
+  padding: 90px 0 40px;
+  text-align: center;
+}
+
+
+
+/* ================= DAY CARD ================= */
+.day-card {
+  background: var(--card);
+  border-radius: 22px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.day-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ================= MEAL ITEM ================= */
+.meal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.04);
+  padding: 14px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.meal-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+  background: var(--card);
+}
+
+.meal-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.meal-left img {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.kcal-pill {
+  background: rgba(75,83,32,0.15);
+  color: var(--primary);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* ================= CHART ================= */
+.chart-wrapper {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.15);
+  max-width: 520px;
+  margin: auto;
+}
+
+/* ================= MODAL ================= */
+.modal-content {
+  background: var(--card);
+  color: var(--text);
+}
+</style>
+</head>
+
+<body>
+
+{% include "navbar.html" %}
+
+<!-- ================= HERO ================= -->
+<section class="page-hero">
+  <div class="container">
+    <h1 class="fw-bold mb-1">Your Personalized Meal Plan</h1>
+    <p class="text-muted">Healthy Indian meals designed for your lifestyle</p>
+  </div>
+</section>
+
+<!-- ================= MEAL PLAN ================= -->
+<div class="container">
+
+{% for date, meals in mealplan.items() %}
+  <div class="day-card">
+    <h5 class="fw-bold mb-3">Day {{ loop.index }} · {{ date }}</h5>
+
+    {% for key, meal in meals.items() %}
+    <div class="meal-item"
+         onclick="openMeal(
+           '{{ meal.name }}',
+           '{{ meal.photo }}',
+           '{{ meal.calories }}',
+           '{{ meal.protein }}',
+           '{{ meal.carbs }}',
+           '{{ meal.fat }}',
+           '{{ meal.youtube }}'
+         )">
+      <div class="meal-left">
+        <img src="{{ meal.photo }}">
+        <div>
+          <strong>{{ key|capitalize }}</strong><br>
+          <span class="text-muted">{{ meal.name }}</span>
+        </div>
+      </div>
+      <div class="kcal-pill">{{ meal.calories }} kcal</div>
+    </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+
+{% if nutrition_chart %}
+<div class="mt-5 text-center">
+  <h3 class="fw-bold mb-4">Daily Nutrition Breakdown</h3>
+  <div class="chart-wrapper">
+    <img
+      src="data:image/png;base64,{{ nutrition_chart }}"
+      class="img-fluid"
+      alt="Nutrition Pie Chart">
+  </div>
+</div>
+{% endif %}
+
+</div>
+
+<!-- ================= MODAL ================= -->
+<div class="modal fade" id="mealModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content p-4">
+      <h4 id="mName"></h4>
+      <img id="mImg" class="img-fluid rounded mb-3">
+      <p><strong>Calories:</strong> <span id="mCal"></span></p>
+      <p><strong>Protein:</strong> <span id="mPro"></span> g</p>
+      <p><strong>Carbs:</strong> <span id="mCarb"></span> g</p>
+      <p><strong>Fat:</strong> <span id="mFat"></span> g</p>
+      <a id="mYT" target="_blank" class="btn btn-success">Watch Recipe</a>
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+function openMeal(name, img, cal, pro, carb, fat, yt) {
+  document.getElementById("mName").innerText = name;
+  document.getElementById("mImg").src = img;
+  document.getElementById("mCal").innerText = cal;
+  document.getElementById("mPro").innerText = pro;
+  document.getElementById("mCarb").innerText = carb;
+  document.getElementById("mFat").innerText = fat;
+  document.getElementById("mYT").href = yt;
+
+  new bootstrap.Modal(document.getElementById("mealModal")).show();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Meal Plans | Admin{% endblock %}
+
+{% block content %}
+
+<div class="d-flex gap-2 mb-4">
+    <a href="/admin/meal-plans?filter=all"
+       class="btn {% if filter_type == 'all' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+        All Plans
+    </a>
+
+    <a href="/admin/meal-plans?filter=active"
+       class="btn {% if filter_type == 'active' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+        Active Plans
+    </a>
+</div>
+
+<h2 class="fw-bold mb-4">
+    {% if filter == "active" %}
+        Active Meal Plans
+    {% else %}
+        All Meal Plans
+    {% endif %}
+</h2>
+
+<div class="admin-table-card p-4">
+<table class="admin-table align-middle">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Duration</th>
+            <th>Calories</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for p in plans %}
+        <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.email }}</td>
+            <td>
+                {{ p.start }} → {{ p.end }}
+            </td>
+            <td>{{ p.calories }} kcal</td>
+
+            <td>
+                {% if filter_type == "active" %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                {% if p.end >= today %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                    <span class="badge bg-secondary">Expired</span>
+                {% endif %}
+                {% endif %}
+            </td>
+
+            <td>
+                <a class="btn btn-sm btn-outline-primary"
+                   href="/admin/users">
+                   View User
+                </a>
+                {% if p.is_active %}
+                    <a class="btn btn-sm btn-outline-danger"
+                    href="/admin/meal-plans/{{ p.plan_id }}/invalidate"
+                    onclick="return confirm('Invalidate this plan?')">
+                    Invalidate
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Users | Admin{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4">Users Management</h2>
+
+<div class="admin-table-card p-4">
+
+<table class="admin-table align-middle">
+  <thead>
+    <tr class="text-muted">
+      <th>Name</th>
+      <th>Email</th>
+      <th>Goal</th>
+      <th>Diet</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for u in users %}
+    <tr>
+      <td>{{ u.name }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.goal }}</td>
+      <td>{{ u.diet }}</td>
+
+      <td>
+        {% if u.is_active %}
+          <span class="badge bg-success">Active</span>
+        {% else %}
+          <span class="badge bg-danger">Disabled</span>
+        {% endif %}
+      </td>
+
+      <td class="d-flex gap-2">
+        <a class="btn btn-sm btn-outline-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#viewUser{{ u.id }}">
+          View
+        </a>
+
+        {% if u.is_active %}
+          <a href="/admin/users/{{ u.id }}/deactivate"
+             class="btn btn-sm btn-outline-warning">
+             Disable
+          </a>
+        {% else %}
+          <a href="/admin/users/{{ u.id }}/activate"
+             class="btn btn-sm btn-outline-success">
+             Enable
+          </a>
+        {% endif %}
+
+        <a href="/admin/users/{{ u.id }}/delete"
+           class="btn btn-sm btn-outline-danger"
+           onclick="return confirm('Delete user permanently?')">
+           Delete
+        </a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+</div>
+
+<!-- ================= USER DETAIL MODALS ================= -->
+{% for user in users %}
+<div class="modal fade" id="viewUser{{ user.id }}" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content admin-modal">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">User Details</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <h6 class="section-title" >Profile Information</h6>
+        <div class="row g-3">
+          <div class="col-md-4"><b>Name:</b> {{ user.name }}</div>
+          <div class="col-md-4"><b>Email:</b> {{ user.email }}</div>
+          <div class="col-md-4"><b>Age:</b> {{ user.age }}</div>
+          <div class="col-md-4"><b>Gender:</b> {{ user.gender }}</div>
+          <div class="col-md-4"><b>Height:</b> {{ user.height }} cm</div>
+          <div class="col-md-4"><b>Weight:</b> {{ user.weight }} kg</div>
+          <div class="col-md-4"><b>Activity:</b> {{ user.activity }}</div>
+          <div class="col-md-4"><b>Goal:</b> {{ user.goal }}</div>
+          <div class="col-md-4"><b>Diet:</b> {{ user.diet }}</div>
+        </div>
+
+        <hr>
+        {% set user_plans = plans | selectattr("user_id", "equalto", user.id) | list %}
+
+        <h6 class="section-title">Meal Plans</h6>
+
+        {% if user_plans %}
+          <div class="plan-list">
+            {% for p in user_plans %}
+              <div class="plan-card">
+                <div class="plan-dates">
+                  {{ p.start_plan_date }} → {{ p.end_plan_date }}
+                </div>
+                <div class="plan-cal">
+                  {{ p.daily_calories }} kcal/day
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted fst-italic">No meal plans found.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+

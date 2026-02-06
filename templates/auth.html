@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Us | Meal Planner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4B5320;
+            --primary-light: #6B7535;
+            --primary-dark: #3B4318;
+            --bg-light: #f5f5f5;
+            --bg-white: #ffffff;
+            --text-dark: #1f1f1f;
+            --text-light: #777;
+            --border-color: #e0e0e0;
+            --shadow: rgba(75, 83, 32, 0.15);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-light);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --bg-light: #020617;
+            --bg-white: #0f172a;
+            --text-dark: #e5e7eb;
+            --text-light: #9ca3af;
+            --border-color: #404040;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--bg-white);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        .navbar-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .brand-name {
+            color: #ffffff;
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            background: var(--bg-light);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: rotate(15deg);
+            border-color: var(--primary-color);
+        }
+
+        .dark-mode-toggle span {
+            font-size: 12px;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .auth-container {
+            background: var(--bg-white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow);
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        /* Toggle Switch */
+        .auth-toggle {
+            display: flex;
+            position: relative;
+            background: var(--bg-light);
+            border-radius: 50px;
+            padding: 5px;
+            margin: 30px auto;
+            width: 300px;
+        }
+
+        .toggle-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text-light);
+            z-index: 2;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            width: 50%;
+            height: calc(100% - 10px);
+            background: var(--primary-color);
+            border-radius: 50px;
+            top: 5px;
+            left: 5px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1;
+        }
+
+        .toggle-option.active {
+            color: white;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .progress-container.hidden {
+            opacity: 0;
+            height: 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.4s ease;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Step Indicators */
+        .step-indicators {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .step-indicators.hidden {
+            opacity: 0;
+            height: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step.completed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .step-line {
+            width: 60px;
+            height: 3px;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .step-line.active {
+            background: var(--primary-color);
+        }
+
+        /* Forms Container */
+        .forms-container {
+            padding: 40px;
+            min-height: 450px;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .form-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-family: 'Poppins';
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--shadow);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins';
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: #ccc;
+        }
+
+        .buttons-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .buttons-group .btn {
+            flex: 1;
+        }
+
+        /* Select Pills */
+        .pills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pill {
+            padding: 10px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            background: var(--bg-white);
+        }
+
+        .pill:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .pill.selected {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Terms */
+        .terms {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .terms a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Alerts */
+        .custom-alert {
+            position: relative;
+            padding: 14px 48px 14px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .custom-alert .btn-close {
+            position: absolute;
+            top: 50%;
+            right: 16px;
+            transform: translateY(-50%);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .brand-name {
+                font-size: 20px;
+            }
+
+            .forms-container {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-toggle {
+                width: 250px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <img src="/static/images/logo.png" height="38">
+                <span class="brand-name">Meal Planner</span>
+            </a>
+            <button class="dark-mode-toggle" id="darkModeToggle">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="auth-container">
+            <!-- Toggle Switch -->
+            <div class="auth-toggle">
+                <div class="toggle-slider" id="toggleSlider"></div>
+                <div class="toggle-option active" id="loginToggle">Login</div>
+                <div class="toggle-option" id="signupToggle">Sign Up</div>
+            </div>
+
+            <!-- Progress Bar (only for signup) -->
+            <div class="progress-container hidden" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <!-- Step Indicators (only for signup) -->
+            <div class="step-indicators hidden" id="stepIndicators">
+                <div class="step active">1</div>
+                <div class="step-line"></div>
+                <div class="step">2</div>
+                <div class="step-line"></div>
+                <div class="step">3</div>
+            </div>
+
+            <!-- Forms Container -->
+            <div class="forms-container">
+                <!-- LOGIN FORM -->
+                <div class="form-section active" id="loginForm">
+                    <h2 class="form-title">Welcome back</h2>
+                    <p class="form-subtitle">Log in to continue your meal planning journey</p>
+
+                    <form method="POST" action="/login" id="loginFormElement">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="Enter your password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Log In</button>
+
+                        <p class="terms">
+                            Forgot your password? <a href="#">Reset here</a>
+                        </p>
+                    </form>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} custom-alert" role="alert">
+                                    <span class="alert-text">{{ message }}</span>
+                                    <button type="button" class="btn-close custom-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+                <!-- SIGNUP STEP 1: Basic Info -->
+                <div class="form-section" id="signupStep1">
+                    <h2 class="form-title">Create an account</h2>
+                    <p class="form-subtitle">Personalized meal plans based on your body & lifestyle</p>
+
+                    <form id="step1Form">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="name" placeholder="Enter your name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="password" placeholder="Create password" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+                            </div>
+                        </div>
+
+                        <div class="buttons-group">
+                            <button type="submit" class="btn btn-primary">Next</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- SIGNUP STEP 2: Body Metrics -->
+                <div class="form-section" id="signupStep2">
+                    <h2 class="form-title">Tell us about yourself</h2>
+                    <p class="form-subtitle">Help us personalize your meal plan</p>
+
+                    <form id="step2Form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Age</label>
+                                <input type="number" id="age" placeholder="Your age" min="5" max="150" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select id="gender" required>
+                                    <option value="" disabled selected>Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Height (cm)</label>
+                                <input type="number" id="height" placeholder="e.g. 170" min="50" max="300" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Weight (kg)</label>
+                                <input type="number" id="weight" placeholder="e.g. 70" min="20" max="500" required>
+                            </div>
+                        </div>
+
+                        <div class="buttons-group">
+                            <button type="button" class="btn btn-secondary" onclick="goToStep(1)">Back</button>
+                            <button type="submit" class="btn btn-primary">Next</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- SIGNUP STEP 3: Preferences -->
+                <div class="form-section" id="signupStep3">
+                    <h2 class="form-title">Your preferences</h2>
+                    <p class="form-subtitle">Select your activity level, goals, and diet type</p>
+
+                    <form method="POST" action="/signup" id="step3Form">
+                        <!-- Hidden fields from previous steps -->
+                        <input type="hidden" name="name" id="hiddenName">
+                        <input type="hidden" name="email" id="hiddenEmail">
+                        <input type="hidden" name="password" id="hiddenPassword">
+                        <input type="hidden" name="confirm_password" id="hiddenConfirmPassword">
+                        <input type="hidden" name="age" id="hiddenAge">
+                        <input type="hidden" name="gender" id="hiddenGender">
+                        <input type="hidden" name="height" id="hiddenHeight">
+                        <input type="hidden" name="weight" id="hiddenWeight">
+                        <input type="hidden" name="activity_level" id="hiddenActivity">
+                        <input type="hidden" name="goal" id="hiddenGoal">
+                        <input type="hidden" name="diet_type" id="hiddenDiet">
+                        <input type="hidden" name="disease" id="hiddenDisease">
+                        <input type="hidden" name="allergies" id="hiddenAllergies">
+
+                        <div class="form-group">
+                            <label>Activity Level</label>
+                            <div class="pills-container" id="activityPills">
+                                <div class="pill" data-value="Sedentary">Sedentary</div>
+                                <div class="pill" data-value="Lightly active">Lightly Active</div>
+                                <div class="pill" data-value="Moderately active">Moderately Active</div>
+                                <div class="pill" data-value="Very active">Very Active</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fitness Goal</label>
+                            <div class="pills-container" id="goalPills">
+                                <div class="pill" data-value="Lose Weight">Lose Weight</div>
+                                <div class="pill" data-value="Maintain Weight">Maintain Weight</div>
+                                <div class="pill" data-value="Gain Weight">Gain Weight</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Diet Type</label>
+                            <div class="pills-container" id="dietPills">
+                                <div class="pill" data-value="veg">Vegetarian</div>
+                                <div class="pill" data-value="non-Veg">Non-Veg</div>
+                                <div class="pill" data-value="vegan">Vegan</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Health Condition (if any)</label>
+                            <select id="disease">
+                                <option value="none" selected>None</option>
+                                <option value="Cancer">Cancer</option>
+                                <option value="Cold">Cold</option>
+                                <option value="Covid-19">Covid-19</option>
+                                <option value="Cholesterol">Cholesterol</option>
+                                <option value="Diabetes">Diabetes</option>
+                                <option value="Heart Disease">Heart Disease</option>
+                                <option value="Hypertension">Hypertension</option>
+                                <option value="Thyroid">Thyroid</option>
+                                <option value="Asthma">Asthma</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Allergies (optional)</label>
+                            <input type="text" id="allergies" placeholder="e.g. nuts, dairy">
+                        </div>
+
+                        <div class="buttons-group">
+                            <button type="button" class="btn btn-secondary" onclick="goToStep(2)">Back</button>
+                            <button type="submit" class="btn btn-primary">Create Account</button>
+                        </div>
+
+                        <p class="terms">
+                            By creating an account, you agree to our
+                            <a href="#">Terms of use</a> and
+                            <a href="#">Privacy Policy</a>.
+                        </p>
+                    </form>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} custom-alert" role="alert">
+                                    <span class="alert-text">{{ message }}</span>
+                                    <button type="button" class="btn-close custom-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const initialMode = "{{ mode }}";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (initialMode === "signup") {
+                switchToSignup();
+            } else {
+                switchToLogin();
+            }
+        });
+
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Toggle between Login and Signup
+        const loginToggle = document.getElementById('loginToggle');
+        const signupToggle = document.getElementById('signupToggle');
+        const toggleSlider = document.getElementById('toggleSlider');
+        const loginForm = document.getElementById('loginForm');
+        const progressContainer = document.getElementById('progressContainer');
+        const stepIndicators = document.getElementById('stepIndicators');
+
+        let currentStep = 1;
+        const selectedData = {
+            activity: null,
+            goal: null,
+            diet: null
+        };
+
+        loginToggle.addEventListener('click', () => {
+            switchToLogin();
+        });
+
+        signupToggle.addEventListener('click', () => {
+            switchToSignup();
+        });
+
+        function switchToLogin() {
+            toggleSlider.style.left = '5px';
+            loginToggle.classList.add('active');
+            signupToggle.classList.remove('active');
+            
+            document.querySelectorAll('.form-section').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            loginForm.classList.add('active');
+            progressContainer.classList.add('hidden');
+            stepIndicators.classList.add('hidden');
+        }
+
+        function switchToSignup() {
+            toggleSlider.style.left = 'calc(50% - 5px)';
+            signupToggle.classList.add('active');
+            loginToggle.classList.remove('active');
+            
+            progressContainer.classList.remove('hidden');
+            stepIndicators.classList.remove('hidden');
+            goToStep(1);
+        }
+
+        // Multi-step form navigation
+        function goToStep(step) {
+            currentStep = step;
+            
+            document.querySelectorAll('.form-section').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            document.getElementById(`signupStep${step}`).classList.add('active');
+            
+            const progress = (step / 3) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            document.querySelectorAll('.step').forEach((stepEl, index) => {
+                const stepNumber = index + 1;
+                const stepLine = stepEl.nextElementSibling;
+                
+                if (stepNumber < step) {
+                    stepEl.classList.add('completed');
+                    stepEl.classList.remove('active');
+                    if (stepLine) stepLine.classList.add('active');
+                } else if (stepNumber === step) {
+                    stepEl.classList.add('active');
+                    stepEl.classList.remove('completed');
+                } else {
+                    stepEl.classList.remove('active', 'completed');
+                    if (stepLine) stepLine.classList.remove('active');
+                }
+            });
+        }
+
+        // Form submissions
+        document.getElementById('loginFormElement').addEventListener('submit', (e) => {
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.innerHTML = '<span class="loading"></span>';
+        });
+
+        document.getElementById('step1Form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            goToStep(2);
+        });
+
+        document.getElementById('step2Form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            goToStep(3);
+        });
+
+        document.getElementById('step3Form').addEventListener('submit', (e) => {
+            if (!selectedData.activity || !selectedData.goal || !selectedData.diet) {
+                e.preventDefault();
+                alert('Please select your Activity Level, Fitness Goal, and Diet Type');
+                return;
+            }
+
+            // Copy all form data to hidden fields
+            document.getElementById('hiddenName').value = document.getElementById('name').value;
+            document.getElementById('hiddenEmail').value = document.getElementById('email').value;
+            document.getElementById('hiddenPassword').value = document.getElementById('password').value;
+            document.getElementById('hiddenConfirmPassword').value = document.getElementById('confirmPassword').value;
+            document.getElementById('hiddenAge').value = document.getElementById('age').value;
+            document.getElementById('hiddenGender').value = document.getElementById('gender').value;
+            document.getElementById('hiddenHeight').value = document.getElementById('height').value;
+            document.getElementById('hiddenWeight').value = document.getElementById('weight').value;
+            document.getElementById('hiddenActivity').value = selectedData.activity;
+            document.getElementById('hiddenGoal').value = selectedData.goal;
+            document.getElementById('hiddenDiet').value = selectedData.diet;
+            document.getElementById('hiddenDisease').value = document.getElementById('disease').value;
+            document.getElementById('hiddenAllergies').value = document.getElementById('allergies').value;
+
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.innerHTML = '<span class="loading"></span>';
+        });
+
+        // Pills selection logic
+        function setupPillsSelection(containerId, dataKey) {
+            const container = document.getElementById(containerId);
+            const pills = container.querySelectorAll('.pill');
+            
+            pills.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    const value = pill.dataset.value;
+                    pills.forEach(p => p.classList.remove('selected'));
+                    pill.classList.add('selected');
+                    selectedData[dataKey] = value;
+                });
+            });
+        }
+
+        setupPillsSelection('activityPills', 'activity');
+        setupPillsSelection('goalPills', 'goal');
+        setupPillsSelection('dietPills', 'diet');
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Account | Meal Planner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  
+  <div class="top-right">
+    Already have an account? <a href="/login">Log in</a>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+
+      <h1>Create an account</h1>
+      <p class="subtitle">
+        Personalized meal plans based on your body & lifestyle
+      </p>
+
+     <form method="POST" action="/signup">
+        <!-- NAME -->
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Enter your name" required>
+
+        <!-- EMAIL -->
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter your email" required>
+
+        <!-- PASSWORD -->
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Create a strong password" required>
+
+        <!-- CONFIRM PASSWORD -->
+        <label>Confirm Password</label>
+        <input type="password" name="confirm_password" placeholder="Confirm password" required>
+
+        <!-- AGE -->
+        <label>Age</label>
+        <input type="number" name="age" placeholder="Your age" min="5" max="150" required>
+
+        <!-- GENDER -->
+        <label>Gender</label>
+        <select name="gender" required>
+          <option value="" disabled selected>Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+
+        <!-- HEIGHT -->
+        <label>Height (cm)</label>
+        <input type="number" name="height" placeholder="e.g. 170" min="50" max="300" required>
+
+        <!-- WEIGHT -->
+        <label>Weight (kg)</label>
+        <input type="number" name="weight" placeholder="e.g. 70" min="20" max="500" required>
+
+        <!-- ACTIVITY LEVEL -->
+        <label>Activity Level</label>
+        <select name="activity_level" required>
+          <option value="" disabled selected>Select activity level</option>
+          <option value="Sedentary" >Sedentary</option>
+          <option value="Lightly active" >Lightly Active</option>
+          <option value="Moderately active">Moderately Active</option>
+          <option value="Very active">Very Active</option>
+        </select>
+
+        <!-- GOAL -->
+        <label>Goal</label>
+        <select name="goal" required>
+          <option value="" disabled selected>Select goal</option>
+          <option value="Lose Weight" >Lose Weight</option>
+          <option value="Maintain Weight" >Maintain Weight</option>
+          <option value="Gain Weight" >Gain Weight</option>
+        </select>
+
+        <!-- diet type -->
+        <label>Diet Type</label>
+        <select name="diet_type" required>
+          <option value="" disabled selected>Select Diet Type</option>
+          <option value="veg" >Veg</option>
+          <option value="non-Veg" >Non Veg</option>
+          <option value="vegan" >Vegan</option>
+        </select>
+
+        <!-- Diseases -->
+        <label>Disease</label>
+        <select name="disease" required>
+          <option value="" disabled selected>Select your disease</option>
+          <option value="none" >None</option>
+          <option value="Cancer" >Cancer</option>
+          <option value="Cold" >Cold</option>
+          <option value="Covid-19" >Covid-19</option>
+          <option value="Cholesterol" >Cholesterol</option>
+          <option value="Diabetes" >Diabetes</option>
+          <option value="Heart Disease" >Heart Disease</option>
+          <option value="Hypertension" >Hypertension</option>
+          <option value="Thyroid" >Thyroid</option>
+          <option value="Asthma" >Asthma</option>
+        </select>
+
+        <!-- ALLERGIES -->
+        <label>Allergies (optional)</label>
+        <input type="text" name="allergies" placeholder="e.g. nuts, dairy">
+        
+        <button type="submit" >Create Account</button>
+
+        <p class="terms">
+          By creating an account, you agree to our
+          <a href="#">Terms of use</a> and
+          <a href="#">Privacy Policy</a>.
+        </p>
+
+      </form>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} custom-alert" role="alert">
+              <span class="alert-text">{{ message }}</span>
+              <button type="button" class="btn-close custom-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<style>
+/* ===== FOOTER ===== */
+.site-footer {
+  background: linear-gradient(
+    135deg,
+    rgba(75,83,32,0.18),
+    rgba(75,83,32,0.05)
+  );
+  color: var(--text);
+  border-top: 1px solid rgba(75,83,32,0.2);
+}
+
+body.dark .site-footer {
+  background: linear-gradient(
+    135deg,
+    rgba(75,83,32,0.35),
+    rgba(2,6,23,0.95)
+  );
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-brand {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--primary);
+}
+
+.footer-desc {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 360px;
+}
+
+.footer-title {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.footer-link {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 6px;
+  transition: color .25s, transform .25s;
+}
+
+.footer-link:hover {
+  color: var(--primary);
+  transform: translateX(4px);
+}
+
+.footer-note {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(0,0,0,0.1);
+  margin-top: 24px;
+  padding-top: 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+body.dark .footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+</style>
+
+<footer class="site-footer mt-5">
+  <div class="container py-5">
+
+    <div class="row gy-4">
+
+        <!-- BRAND -->
+        <div class="col-md-4">
+            <div class="footer-brand mb-2">Meal Planner</div>
+            <p class="footer-desc">
+                Personalized Indian meal planning powered by AI.
+                Eat smarter, stay consistent, and reach your health goals effortlessly.
+            </p>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="col-md-2">
+            <div class="footer-title">Explore</div>
+            {% if is_logged_in %}
+                <a href="/dashboard" class="footer-link">Home</a>
+                <a href="/meal-plan" class="footer-link">Your Plan</a>
+                <a href="/profile" class="footer-link">Profile</a>
+            {% else %}
+                <a href="/" class="footer-link">Home</a>
+                <a href="/signup" class="footer-link">Get Started</a>
+                <a href="/login" class="footer-link">Login</a>
+            {% endif %}
+
+            <a href="#" class="footer-link">Blog</a>
+        </div>
+
+        <!-- SUPPORT -->
+        <div class="col-md-2">
+            <div class="footer-title">Support</div>
+            <a href="#" class="footer-link">Help Center</a>
+            <a href="#" class="footer-link">Contact Us</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Use</a>
+        </div>
+
+        <!-- TRUST / AI NOTE -->
+        <div class="col-md-4">
+            <div class="footer-title">Built for You</div>
+            <p class="footer-note">
+                Meal recommendations are generated using AI based on your preferences,
+                goals, and dietary needs. Always consult a professional for medical advice.
+            </p>
+            <p class="footer-note mt-2">
+                Designed with ❤️ for Indian lifestyles.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="footer-bottom text-center mt-4">
+      © {{ current_year }} Meal Planner · All rights reserved
+    </div>
+
+  </div>
+</footer>
